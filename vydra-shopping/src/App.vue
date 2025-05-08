@@ -1,0 +1,110 @@
+<script>
+import { defineComponent } from "vue";
+
+export default defineComponent ({
+  data() {
+    return {
+      counter: 0,
+      items: [
+        {item_name: 'Nachos'},
+        {item_name: 'Pizza'},
+        {item_name: 'Burrito'},
+        {item_name: 'Kebab'},
+        {item_name: 'Falafel'},
+        {item_name: 'Spaghetti'},
+        {item_name: 'Burger'},
+      ],
+      cart: new Map(),
+      isVisible: false,
+    }
+  },
+  methods: {
+    addToCart(item_name) {
+      if (this.counter < 5) {
+        this.counter++;
+        let hasAmount = this.cart.has(item_name);
+
+        // this is disgusting
+        hasAmount ? this.cart.set(item_name, this.cart.get(item_name) + 1) : this.cart.set(item_name, 1);
+      } else {
+        throw new Error("Index out of bounds");
+      }
+    },
+    showCart() {
+      this.isVisible = !this.isVisible;
+    },
+  },
+});
+</script>
+
+
+<template>
+  <div>
+    <!-- Title -->
+    <div class="banner">
+      <h1> Vydra Shopping </h1>
+    </div>
+
+    <button class="cart-button" @click="showCart()"> <img src=".\assets\cart.svg"> </button>
+
+    
+    <div class="cart" v-if="isVisible">
+      Items
+      <div v-for="item in cart" :key="item">
+        <p> {{ item[0] }} - {{ item[1] }}</p>
+      </div>
+    </div>
+
+    <!-- Items -->
+    <div class="wrapper" >
+      <div class="card" style="width: 18rem;" v-for="item in items" :key="item">
+        <img class="card-img-top" src=".\assets\otter.jpg">
+        <div class="card-body">
+          <h4 class="card-title"> {{ item.item_name }}</h4>
+          <button @click="addToCart(item.item_name)"> Add to cart </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</template>
+
+<style scoped>
+
+.banner{
+  background-color: #309898;
+  padding: 2%;
+}
+
+.card-img-top{
+  width: 100%;
+}
+
+.cart {
+  background-color: #237373;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  height: 100%;
+  padding: 5%;
+  filter: drop-shadow(-5px 0px 15px #000000);
+}
+
+.cart-button{
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 1%;
+}
+
+.wrapper{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content:space-evenly;
+  /* width: 100%; */
+  /* height: 100%; */
+}
+</style>

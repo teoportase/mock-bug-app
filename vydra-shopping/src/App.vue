@@ -63,21 +63,23 @@ export default defineComponent({
     <button class="cart-button" @click="showCart()"> <img src=".\assets\cart.svg"> </button>
 
 
-    <div class="cart" v-if="isVisible">
-      <h3>Items</h3>
-      <div v-for="item in cart" :key="item" class="cart-item-row">
-        <p> {{ item[0] }} - {{ item[1] }}</p>
-        <button
-            @click="removeFromCart(itemName)"
+    <transition name="slide-fade">
+      <div class="cart" v-if="isVisible">
+        <h3>Items</h3>
+        <div v-for="item in cart" :key="item[0]" class="cart-item-row">
+          <p>{{ item[0] }} - {{ item[1] }}</p>
+          <button
+            @click="removeFromCart(item[0])"
             class="remove-item-button"
           >
             Remove
           </button>
+        </div>
+        <div class="button-container">
+          <button id="checkout-button" @click="checkout()">Checkout</button>
+        </div>
       </div>
-      <div class="button-container">
-        <button id="checkout-button" @click="checkout()"> Checkout </button>
-      </div>
-    </div>
+    </transition>
 
     <!-- Items -->
     <div class="wrapper">
@@ -102,7 +104,6 @@ export default defineComponent({
 .card-img-top {
   width: 100%;
   border-radius: 15px;
-
 }
 
 .button-container {
@@ -127,6 +128,7 @@ export default defineComponent({
   padding: 20px;
   box-sizing: border-box;
   filter: drop-shadow(-5px 0px 15px #000000);
+  transition: transform 0.3s ease-out;
 }
 
 .cart-button {
@@ -164,7 +166,19 @@ export default defineComponent({
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-evenly;
-  /* width: 100%; */
-  /* height: 100%; */
+}
+
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
 }
 </style>

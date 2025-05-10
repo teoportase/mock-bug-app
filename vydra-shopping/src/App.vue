@@ -45,6 +45,10 @@ export default defineComponent({
       this.isVisible = !this.isVisible;
     },
     checkout() {
+      if (this.cart.size === 0) {
+        alert("Your cart is empty!");
+        return;
+      }
       alert("Checkout Successful!");
       location.reload();
     }

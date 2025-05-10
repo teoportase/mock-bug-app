@@ -30,11 +30,23 @@ export default defineComponent({
         throw new Error("Index out of bounds");
       }
     },
+    removeFromCart(item_name) {
+      if (this.cart.has(item_name)) {
+        const currentQuantity = this.cart.get(item_name);
+        if (currentQuantity > 1) {
+          this.cart.set(item_name, currentQuantity - 1);
+        } else {
+          this.cart.delete(item_name);
+        }
+        this.counter--;
+      }
+    },
     showCart() {
       this.isVisible = !this.isVisible;
     },
     checkout() {
       alert("Checkout Successful!");
+      location.reload();
     }
   },
 });
@@ -53,8 +65,14 @@ export default defineComponent({
 
     <div class="cart" v-if="isVisible">
       <h3>Items</h3>
-      <div v-for="item in cart" :key="item">
+      <div v-for="item in cart" :key="item" class="cart-item-row">
         <p> {{ item[0] }} - {{ item[1] }}</p>
+        <button
+            @click="removeFromCart(itemName)"
+            class="remove-item-button"
+          >
+            Remove
+          </button>
       </div>
       <div class="button-container">
         <button id="checkout-button" @click="checkout()"> Checkout </button>
@@ -104,8 +122,10 @@ export default defineComponent({
   z-index: 1;
   top: 0;
   right: 0;
+  width: 300px;
   height: 100%;
-  padding: 5%;
+  padding: 20px;
+  box-sizing: border-box;
   filter: drop-shadow(-5px 0px 15px #000000);
 }
 
@@ -115,6 +135,28 @@ export default defineComponent({
   top: 0;
   right: 0;
   margin: 1%;
+}
+
+.cart-item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #309898;
+}
+
+.remove-item-button {
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.remove-item-button:hover {
+  background-color: #ee5253;
 }
 
 .wrapper {
